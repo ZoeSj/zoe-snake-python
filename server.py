@@ -4,6 +4,7 @@ import cherrypy
 
 import server_logic
 
+
 class BattlesnakeServer(object):
     """
     This is a simple Battlesnake server written in Python using the CherryPy Web Framework.
@@ -39,7 +40,7 @@ class BattlesnakeServer(object):
         cherrypy.request.json contains information about the game that's about to be played.
         """
         data = cherrypy.request.json
-        
+
         print(f"{data['game']['id']} START")
         return "ok"
 
@@ -66,7 +67,7 @@ class BattlesnakeServer(object):
         It's purely for informational purposes, you don't have to make any decisions here.
         """
         data = cherrypy.request.json
-        
+
         print(f"{data['game']['id']} END")
         return "ok"
 
@@ -75,7 +76,7 @@ if __name__ == "__main__":
     server = BattlesnakeServer()
     cherrypy.config.update({"server.socket_host": "0.0.0.0"})
     cherrypy.config.update(
-        {"server.socket_port": int(os.environ.get("PORT", "8080")),}
+        {"server.socket_port": int(os.environ.get("PORT", "8080")), }
     )
     print("Starting Battlesnake Server...")
     cherrypy.quickstart(server)
