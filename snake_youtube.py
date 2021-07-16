@@ -46,6 +46,7 @@ class snake(object):
     turns = {}
 
     def __init__(self, color, pos):
+        # pos is given as coordinates on the grid ex (1,5)
         self.color = color
         self.head = cube(pos)
         self.body.append(self.head)
@@ -143,6 +144,7 @@ def redrawWindow():
 
 def randomSnack(rows, items):
     positions = items.body
+
     while True:
         x = random.randrange(rows)
         y = random.randrange(rows)
