@@ -1,8 +1,8 @@
-# Snake
 import math
-import random
 import pygame
+import random
 import tkinter as tk
+from tkinter import messagebox
 
 width = 500
 height = 500
@@ -11,20 +11,20 @@ cols = 25
 rows = 20
 
 
-class cube(object):
+class cube():
     rows = 20
     w = 500
 
     def __init__(self, start, dirnx=1, dirny=0, color=(255, 0, 0)):
         self.pos = start
         self.dirnx = dirnx
-        self.dirny = dirny
+        self.dirny = dirny  # "L", "R", "U", "D"
         self.color = color
 
     def move(self, dirnx, dirny):
-        self.drinx = dirnx
-        self.driny = dirny
-        self.pos = (self.pos[0] + self.drinx, self.pos[1] + self.dirny)
+        self.dirnx = dirnx
+        self.dirny = dirny
+        self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
     def draw(self, surface, eyes=False):
         dis = self.w // self.rows
@@ -35,13 +35,13 @@ class cube(object):
         if eyes:
             centre = dis // 2
             radius = 3
-            circuleMiddle = (i * dis + centre - radius, j * dis + 8)
-            circuleMiddle2 = (i * dis + dis - radius * 2, j * dis + 8)
-            pygame.draw.circle(surface, (0, 0, 0), circuleMiddle, radius)
-            pygame.draw.circle(surface, (0, 0, 0), circuleMiddle2, radius)
+            circleMiddle = (i * dis + centre - radius, j * dis + 8)
+            circleMiddle2 = (i * dis + dis - radius * 2, j * dis + 8)
+            pygame.draw.circle(surface, (0, 0, 0), circleMiddle, radius)
+            pygame.draw.circle(surface, (0, 0, 0), circleMiddle2, radius)
 
 
-class snake(object):
+class snake():
     body = []
     turns = {}
 
@@ -50,8 +50,8 @@ class snake(object):
         self.color = color
         self.head = cube(pos)
         self.body.append(self.head)
-        self.drinx = 0
-        self.driny = 1
+        self.dirnx = 0
+        self.dirny = 1
 
     def move(self):
         for event in pygame.event.get():
@@ -77,15 +77,15 @@ class snake(object):
                     self.dirnx = 0
                     self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
-            for i, c in enumerate(self.body):
-                p = c.pos[:]
-                if p in self.turns:
-                    turn = self.turns[p]
-                    c.move(turn[0], turn[1])
-                    if i == len(self.body) - 1:
-                        self.turns.pop(p)
-                else:
-                    c.move(c.dirnx, c.dirny)
+        for i, c in enumerate(self.body):
+            p = c.pos[:]
+            if p in self.turns:
+                turn = self.turns[p]
+                c.move(turn[0], turn[1])
+                if i == len(self.body) - 1:
+                    self.turns.pop(p)
+            else:
+                c.move(c.dirnx, c.dirny)
 
     def reset(self, pos):
         self.head = cube(pos)
@@ -142,12 +142,12 @@ def drawGrid(w, rows, surface):
         pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y))
 
 
-def randomSnack(rows, items):
-    positions = items.body
+def randomSnack(rows, item):
+    positions = item.body
 
     while True:
-        x = random.randrange(rows)
-        y = random.randrange(rows)
+        x = random.randrange(1, rows - 1)
+        y = random.randrange(1, rows - 1)
         if len(list(filter(lambda z: z.pos == (x, y), positions))) > 0:
             continue
         else:
@@ -158,7 +158,7 @@ def randomSnack(rows, items):
 
 def main():
     global s, snack, win
-    win = pygame.display.set_mode((width, width))
+    win = pygame.display.set_mode((width, height))
     s = snake((255, 0, 0), (10, 10))
     s.addCube()
     snack = cube(randomSnack(rows, s), color=(0, 255, 0))
